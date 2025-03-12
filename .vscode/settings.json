@@ -1,0 +1,10 @@
+{
+  "editor.formatOnSave": true,
+    "angular-schematics.schematicsDefaultOptions": {
+        "angular-*": {
+            "skipStyle": true,
+            "externalTemplate": true,
+            "skipChangeDetectionOnPush": true
+        },
+    }
+}
