@@ -7,11 +7,8 @@ import {
   viewChild,
 } from '@angular/core';
 import { environment } from '@environments/environment';
-
-import mapboxgl, { Map as MapboxMap, Marker as MapboxMarker } from 'mapbox-gl';
+import { Map as MapboxMap, Marker as MapboxMarker } from 'mapbox-gl';
 import { getRandomHexColor } from 'src/app/utils/hex-color-generator';
-
-mapboxgl.accessToken = environment.mapBoxApiKey;
 
 const delay = () => new Promise((resolve) => setTimeout(resolve, 80));
 
@@ -34,6 +31,7 @@ export class MiniMapComponent implements AfterViewInit {
     const element = this.divElement()!.nativeElement;
     const { lng, lat } = this.lngLat();
     const map = new MapboxMap({
+      accessToken: environment.mapBoxApiKey,
       container: element,
       interactive: false,
       style: 'mapbox://styles/mapbox/streets-v12',

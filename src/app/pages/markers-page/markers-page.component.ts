@@ -6,7 +6,7 @@ import {
   viewChild,
 } from '@angular/core';
 import { environment } from '@environments/environment';
-import mapboxgl, {
+import {
   Map as MapboxMap,
   Marker as MapboxMarker,
   LngLatLike,
@@ -15,8 +15,6 @@ import mapboxgl, {
 import { v4 as uuidv4 } from 'uuid';
 import { getRandomHexColor } from 'src/app/utils/hex-color-generator';
 import { JsonPipe } from '@angular/common';
-
-mapboxgl.accessToken = environment.mapBoxApiKey;
 
 interface Marker {
   id: string;
@@ -42,6 +40,7 @@ export class MarkersPageComponent implements AfterViewInit {
     await delay();
     const element = this.divElement()!.nativeElement;
     const map = new MapboxMap({
+      accessToken: environment.mapBoxApiKey,
       container: element,
       style: 'mapbox://styles/mapbox/streets-v12',
       center: [-64.1971129, -31.4136803],
