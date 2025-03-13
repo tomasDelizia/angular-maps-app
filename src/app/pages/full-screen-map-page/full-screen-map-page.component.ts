@@ -19,7 +19,7 @@ mapboxgl.accessToken = environment.mapBoxApiKey;
 })
 export class FullScreenMapPageComponent implements AfterViewInit {
   zoom = signal(12);
-  coordinates = signal({ lng: -64.2766129, lat: -31.3992803 });
+  coordinates = signal({ lng: -64.1971129, lat: -31.4136803 });
 
   divElement = viewChild<ElementRef>('map');
 
