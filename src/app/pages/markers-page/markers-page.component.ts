@@ -80,4 +80,10 @@ export class MarkersPageComponent implements AfterViewInit {
       center: lngLat,
     });
   }
+
+  deleteMarker(marker: Marker) {
+    if (!this.map()) return;
+    marker.mapboxMarker.remove();
+    this.markers.set(this.markers().filter((m) => m.id !== marker.id));
+  }
 }
