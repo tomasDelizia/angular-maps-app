@@ -6,33 +6,42 @@ import {
   viewChild,
 } from '@angular/core';
 import { environment } from '@environments/environment';
-import mapboxgl from 'mapbox-gl';
+import mapboxgl, {
+  Map as MapboxMap,
+  Marker as MapboxMarker,
+  LngLatLike,
+  MapMouseEvent,
+} from 'mapbox-gl';
 import { v4 as uuidv4 } from 'uuid';
 import { getRandomHexColor } from 'src/app/utils/hex-color-generator';
+import { JsonPipe } from '@angular/common';
 
 mapboxgl.accessToken = environment.mapBoxApiKey;
 
 interface Marker {
   id: string;
-  mapboxMarker: mapboxgl.Marker;
+  mapboxMarker: MapboxMarker;
 }
+
+const delay = () => new Promise((resolve) => setTimeout(resolve, 80));
 
 @Component({
   selector: 'app-markers-page',
-  imports: [],
+  imports: [JsonPipe],
   templateUrl: './markers-page.component.html',
 })
 export class MarkersPageComponent implements AfterViewInit {
   divElement = viewChild<ElementRef>('map');
 
-  map = signal<mapboxgl.Map | null>(null);
+  map = signal<MapboxMap | null>(null);
 
   markers = signal<Marker[]>([]);
 
   async ngAfterViewInit(): Promise<void> {
     if (!this.divElement()?.nativeElement) return;
+    await delay();
     const element = this.divElement()!.nativeElement;
-    const map = new mapboxgl.Map({
+    const map = new MapboxMap({
       container: element,
       style: 'mapbox://styles/mapbox/streets-v12',
       center: [-64.1971129, -31.4136803],
@@ -41,16 +50,16 @@ export class MarkersPageComponent implements AfterViewInit {
     this.mapListeners(map);
   }
 
-  mapListeners(map: mapboxgl.Map) {
+  mapListeners(map: MapboxMap) {
     map.on('click', (event) => {
       this.mapClick(event);
     });
     this.map.set(map);
   }
 
-  private mapClick(event: mapboxgl.MapMouseEvent) {
+  private mapClick(event: MapMouseEvent) {
     if (!this.map()) return;
-    const mapboxMarker = new mapboxgl.Marker({
+    const mapboxMarker = new MapboxMarker({
       draggable: false,
       color: getRandomHexColor(),
     })
@@ -63,5 +72,12 @@ export class MarkersPageComponent implements AfterViewInit {
     };
     this.markers.set([newMarker, ...this.markers()]);
     console.log(this.markers());
+  }
+
+  flyToMarker(lngLat: LngLatLike) {
+    if (!this.map()) return;
+    this.map()?.flyTo({
+      center: lngLat,
+    });
   }
 }
